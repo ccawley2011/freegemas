@@ -1,12 +1,15 @@
 #include "OptionsManager.h"
 
+#if defined(_WIN32) || defined(__riscos__)
+    #include <SDL.h>
+#elif defined(__vita__)
+    #include <psp2/io/stat.h>
+#else
+    #include <sys/stat.h>
+#endif
+
 void OptionsManager::loadResources()
 {
-    std::string optionsDir = getOptionsDir();
-
-    // Make sure the directory exists
-    mkdir(optionsDir.c_str(), 0755);
-
     loadOptions();
 }
 
@@ -14,8 +17,18 @@ std::string OptionsManager::getOptionsDir()
 {
     std::string optionsPath;
 
-    #ifdef __vita__
+    #if defined(_WIN32) || defined(__riscos__)
+        char *prefPath = SDL_GetPrefPath(NULL, "freegemas");
+        if (prefPath) {
+            optionsPath = prefPath;
+        } else {
+            optionsPath = "./";
+        }
+    #elif defined(__vita__)
         optionsPath = "ux0:/data/freegemas/";
+
+        // Make sure the directory exists
+        sceIoMkdir(optionsPath.c_str(), 0755);
     #else
         char *xdgConfHome = getenv("XDG_CONFIG_HOME");
         if (xdgConfHome) {
@@ -28,6 +41,9 @@ std::string OptionsManager::getOptionsDir()
                 optionsPath = "./";
             }
         }
+
+        // Make sure the directory exists
+        mkdir(optionsPath.c_str(), 0755);
     #endif
 
     return optionsPath;

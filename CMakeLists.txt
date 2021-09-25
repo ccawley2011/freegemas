@@ -20,16 +20,16 @@ if (CMAKE_HOST_APPLE)
             OUTPUT_VARIABLE HOMEBREW_GETTEXT_PREFIX)
         list(APPEND CMAKE_PREFIX_PATH "${HOMEBREW_GETTEXT_PREFIX}")
     endif()
-
-    find_path(LIBINTL_INCLUDE_DIRS
-        NAMES libintl.h
-        PATH_SUFFIXES gettext
-    )
-
-    find_library(LIBINTL_LIBRARIES
-        NAMES intl libintl.a
-    )
 endif()
+
+find_path(LIBINTL_INCLUDE_DIRS
+    NAMES libintl.h
+    PATH_SUFFIXES gettext
+)
+
+find_library(LIBINTL_LIBRARIES
+    NAMES intl libintl.a
+)
 
 
 

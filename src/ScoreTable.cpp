@@ -6,8 +6,6 @@
 #include "Game.h"
 
 #include <fstream>
-#include <unistd.h>
-#include <pwd.h>
 
 using namespace std;
 
